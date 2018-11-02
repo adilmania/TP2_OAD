@@ -15,6 +15,12 @@ int main(array<System::String ^> ^args)
 
 	lire_instance(ad_file,un_probleme);
 
-	Evaluer(un_probleme, SOL);
+	Generer_Vecteur(SOL,un_probleme);
+	Generer_Vecteur(SOL, un_probleme);
+	Generer_Vecteur(SOL, un_probleme);
+	Generer_Vecteur(SOL, un_probleme);
+	Generer_Vecteur(SOL, un_probleme);
+
+	// Evaluer(un_probleme, SOL);
     return 0;
 }

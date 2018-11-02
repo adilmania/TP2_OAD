@@ -66,6 +66,43 @@ void lire_instance(string ad_file, T_PROBLEME &un_probleme)
 	}
 }
 
+// Fonction permettant de génerer un vecteur de Bierwith
+
+void Generer_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme)
+{
+
+	int i;
+	int tab[taille_vecteur] = { 0 };
+	int nb_operations = un_probleme.n * un_probleme.m;
+
+	SOL.vecteur[0] = 999;
+
+	for (i = 1; i <= nb_operations; i++)
+	{
+		do
+		{
+			SOL.vecteur[i] = (int)(rand() % un_probleme.n) + 1;
+		} while (tab[SOL.vecteur[i]] >= (un_probleme.m));
+
+		tab[SOL.vecteur[i]]++;
+
+	}
+	Afficher_Vecteur(SOL, un_probleme);
+}
+
+void Afficher_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme)
+{
+	int i;
+	int nb_operations = un_probleme.n * un_probleme.m;
+	printf("Le vecteur est : ");
+	for (i = 1; i < nb_operations + 1; i++) {
+		printf("%d ", SOL.vecteur[i]);
+	}
+	printf("\n");
+}
+
+// Fonction Evaluer 
+
 void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 	SOL.ES[0] = 0;
 	int i, j, k, prec, date, mach, compteur, cour, pos, finCheminCritique;

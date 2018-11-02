@@ -4,6 +4,7 @@
 const int nmax = 10;
 const int mmax = 10;
 const int ntotal = 40;
+const int taille_vecteur = nmax*mmax + 1;
 
 // Définition des structures
 
@@ -24,5 +25,6 @@ typedef struct T_SOLUS
 }T_SOLUS;
 
 void lire_instance(std::string ad_file, T_PROBLEME &un_probleme); // Lire le fichier
-
+void Generer_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme);
+void Afficher_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme);
 void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL); // On remplit ES & Pere ALGO DE BIERWITH
