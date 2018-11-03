@@ -94,7 +94,7 @@ void Afficher_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme)
 {
 	int i;
 	int nb_operations = un_probleme.n * un_probleme.m;
-	printf("Le vecteur est : ");
+	printf("Vecteur de Bierwith : ");
 	for (i = 1; i < nb_operations + 1; i++) {
 		printf("%d ", SOL.vecteur[i]);
 	}
@@ -193,6 +193,9 @@ void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 		std::cout << endl;
 	}
 
+	// Generation d'un Vecteur de Bierwith Aleatoire
+	Generer_Vecteur(SOL, un_probleme);
+
 	// ALGO
 	for (i = 1; i <= prod; i++)
 	{
@@ -224,8 +227,6 @@ void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 			}
 		}
 		m[mach] = k;
-		cout << "Passage dans la boucle" << endl;
-
 	}
 
 	for (i = 1; i <= un_probleme.n; i++) {
@@ -235,7 +236,7 @@ void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 		}
 	}
 
-	cout << endl << "Affichage du makespan" << endl;
+	cout << "Affichage du makespan" << endl;
 	cout << SOL.ES[0] << endl;
 
 	cout << "Affichage du chemin critique" << endl;
@@ -246,4 +247,34 @@ void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 	}
 
 	cout << "Réussi" << endl;
+}
+
+// Fonction Recherche Locale
+
+void Recherche_Locale(T_PROBLEME &un_probleme, T_SOLUS &SOL, int nbMaxIterations) {
+	int nc = 0;
+	int i = un_probleme.n;
+	int j = SOL.PERE[i];
+	int k = 1;
+	int t = 1;
+	int eps;
+	int APP[ntotal + 1];
+	int prod = un_probleme.n * un_probleme.m;
+
+	// Initialisation Tableau APP
+	APP[0] = 999;
+
+	while (t <= prod)
+	{
+		eps = 0;
+		while (eps < un_probleme.m) {
+			APP[t + eps] = k;
+			eps++;
+		}
+		k++;
+		t += eps;
+	}
+
+	printf("TEST");
+	Evaluer(un_probleme, SOL);
 }
