@@ -102,9 +102,8 @@ void Afficher_Vecteur(T_SOLUS &SOL, T_PROBLEME &un_probleme)
 }
 
 // Fonction Evaluer 
-
 void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
-	SOL.ES[0] = 0;
+	SOL.cout = 0;
 	int i, j, k, prec, date, mach, compteur, cour, pos, finCheminCritique;
 	int prod = un_probleme.n * un_probleme.m;
 	int NP[nmax] = { 0 };
@@ -229,36 +228,31 @@ void Evaluer(T_PROBLEME &un_probleme, T_SOLUS &SOL) {
 		m[mach] = k;
 	}
 
+	// Calcul du cout (makespan)
 	for (i = 1; i <= un_probleme.n; i++) {
-		if (SOL.ES[0]<SOL.ES[i*un_probleme.m]+un_probleme.P[i][un_probleme.m]) {
-			SOL.ES[0] = SOL.ES[i*un_probleme.m] + un_probleme.P[i][un_probleme.m]; /* Calcul du Makespan */
+		if (SOL.cout<SOL.ES[i*un_probleme.m]+un_probleme.P[i][un_probleme.m]) {
+			SOL.cout = SOL.ES[i*un_probleme.m] + un_probleme.P[i][un_probleme.m];
 			finCheminCritique = i*un_probleme.m;
 		}
 	}
 
 	cout << "Affichage du makespan" << endl;
-	cout << SOL.ES[0] << endl;
+	cout << SOL.cout << endl;
 
 	cout << "Affichage du chemin critique" << endl;
-	i = SOL.PERE[finCheminCritique]; /* PK 24 AVANT? */
+	i = SOL.PERE[finCheminCritique];
 	while (i != 0) {
 		cout << i << " ";
 		i = SOL.PERE[i];
 	}
-
 	cout << "Réussi" << endl;
 }
 
-// Fonction Recherche Locale
-
-void Recherche_Locale(T_PROBLEME &un_probleme, T_SOLUS &SOL, int nbMaxIterations) {
-	int nc = 0;
-	int i = un_probleme.n;
-	int j = SOL.PERE[i];
+// Fonction Initialiation Tableau Appartient
+void Initialiser_Tableau_APP(T_PROBLEME &un_probleme, int APP[ntotal + 1]) {
 	int k = 1;
 	int t = 1;
 	int eps;
-	int APP[ntotal + 1];
 	int prod = un_probleme.n * un_probleme.m;
 
 	// Initialisation Tableau APP
@@ -274,7 +268,69 @@ void Recherche_Locale(T_PROBLEME &un_probleme, T_SOLUS &SOL, int nbMaxIterations
 		k++;
 		t += eps;
 	}
-
-	printf("TEST");
-	Evaluer(un_probleme, SOL);
 }
+/*
+// Fonction Recherche Locale
+T_SOLUS Recherche_Locale(T_PROBLEME &un_probleme, T_SOLUS &SOL, int nbMaxIterations) {
+	int i = un_probleme.n,
+		j = SOL.PERE[i],
+		nc = 0,
+		nb_ops = un_probleme.n * un_probleme.m,
+		APP[ntotal + 1];
+	
+	T_SOLUS SOL2;
+
+	Initialiser_Tableau_APP(un_probleme,APP);
+
+	Evaluer(un_probleme, SOL);
+
+	while ((j != 0) && (nc <= nbMaxIterations)) {
+		nc++;
+		if (APP[i] != APP[j]) {
+			SOL2 = SOL;
+			Evaluer(un_probleme, SOL2);
+			if (SOL2.cout < SOL.cout) {
+				SOL = SOL2;
+				// Echanger Disj
+				i = un_probleme.n;
+				j = SOL.PERE[i];
+			}
+			else
+			{
+				i = j;
+				j = SOL.PERE[j];
+			}
+		}
+		else
+		{
+			i = j;
+			j = SOL.PERE[j];
+		}
+	}
+	return SOL2;
+}
+
+// Fonction Tester Double
+bool Tester_Double(T_SOLUS &SOL1, T_SOLUS &SOL2)
+{
+	int i = 0, j = 0;
+	bool egal = true;
+
+	while (SOL1.cout <= pop[i].cout)
+	{
+		if (SOL1.cout == pop[i].cout)
+		{
+			j = 0;
+			while (egal == true && j < CARD_POP)
+			{
+				if (SOL1.vecteur[j] != pop[i].vecteur[j])
+					egal = false;
+
+				j++;
+			}
+		}
+		i++;
+	}
+	return egal;
+}
+*/
