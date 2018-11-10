@@ -22,6 +22,9 @@
     <Text Include="AD01.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="LA01.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
