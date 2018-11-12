@@ -9,6 +9,7 @@ using namespace std;
 
 // Fonction permettant de lire une instance à partir d'un fichier
 
+/*
 void lire_instance(std::string ad_file, T_Probleme &un_probleme)
 {
 	ifstream fichier(ad_file, ios::in);  // on ouvre le fichier en lecture
@@ -47,7 +48,7 @@ void lire_instance(std::string ad_file, T_Probleme &un_probleme)
 				// cout << c << endl;
 				if (compteur % 2 == 0)
 				{
-					un_probleme.Mach[i][j] = c + 1; /* c+1 avant */
+					un_probleme.Mach[i][j] = c + 1; // c+1 avant
 				}
 				else
 				{
@@ -65,7 +66,9 @@ void lire_instance(std::string ad_file, T_Probleme &un_probleme)
 		cerr << "Impossible d'ouvrir le fichier !" << endl;
 	}
 }
+*/
 
+/*
 void Init_Graphe(T_Probleme &un_probleme) {
 	int i, j, compteur;
 	std::cout << "Affichage M" << endl;
@@ -149,6 +152,7 @@ void Init_Graphe(T_Probleme &un_probleme) {
 	}
 
 }
+*/
 
 // Fonction permettant de génerer un vecteur de Bierwith
 

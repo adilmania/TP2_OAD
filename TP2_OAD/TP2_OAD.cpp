@@ -15,8 +15,8 @@ int main(array<System::String ^> ^args)
 	T_Solution sol;
 	
 	std::string ad_file = "LA01.txt";
-	lire_instance(ad_file, un_probleme);
-	Init_Graphe(un_probleme);
+	//lire_instance(ad_file, un_probleme);
+	//Init_Graphe(un_probleme);
 
 	T_Population tab_pop[card_pop];
 	Init_Tab_Pop(tab_pop);

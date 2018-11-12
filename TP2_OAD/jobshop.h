@@ -38,13 +38,13 @@ typedef struct T_Solution
 	int PERE[ntotal + 1] = { 0 };
 }T_Solution;
 
-void lire_instance(std::string ad_file, T_Probleme &un_probleme); // Lire le fichier
-void Init_Graphe(T_Probleme &un_probleme);
+// void lire_instance(std::string ad_file, T_Probleme &un_probleme); // Lire le fichier
+//void Init_Graphe(T_Probleme &un_probleme);
 
 void Generer_Vecteur(T_Population &pop, T_Probleme &un_probleme);
 void Afficher_Vecteur(T_Population &pop, T_Probleme &un_probleme);
 
-void Evaluer(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int &finCheminCritique); // On remplit ES & Pere ALGO DE BIERWITH
+// void Evaluer(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int &finCheminCritique); // On remplit ES & Pere ALGO DE BIERWITH
 
 void Initialiser_Tableau_APP(T_Probleme &un_probleme, int APP[ntotal + 1]);
 void Swap_Arc_Disjonctif(T_Probleme &un_probleme, int i, int j, T_Population &pop, T_Population &pop2);

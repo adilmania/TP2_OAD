@@ -147,6 +147,7 @@
     <ClInclude Include="jobshop.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Unit_JobShop.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
@@ -161,6 +162,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TP2_OAD.cpp" />
+    <ClCompile Include="Unit_JobShop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
