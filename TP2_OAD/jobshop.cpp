@@ -154,7 +154,6 @@ void Init_Graphe(T_Probleme &un_probleme) {
 
 void Generer_Vecteur(T_Population &pop, T_Probleme &un_probleme)
 {
-
 	int i;
 	int tab[taille_vecteur] = { 0 };
 	int nb_operations = un_probleme.n * un_probleme.m;
@@ -264,8 +263,8 @@ void Initialiser_Tableau_APP(T_Probleme &un_probleme, int APP[ntotal + 1]) {
 // Fonction Permutation Arc Disjonctif
 void Swap_Arc_Disjonctif(T_Probleme &un_probleme, int i, int j, T_Population &pop, T_Population &pop2) {
 
-	Afficher_Vecteur(pop, un_probleme);
-	Afficher_Vecteur(pop2, un_probleme);
+	//Afficher_Vecteur(pop, un_probleme);
+	//Afficher_Vecteur(pop2, un_probleme);
 
 	int qi, ri, qj, rj;
 
@@ -302,13 +301,13 @@ void Swap_Arc_Disjonctif(T_Probleme &un_probleme, int i, int j, T_Population &po
 	pop2.vecteur[kj] = pop2.vecteur[ki];
 	pop2.vecteur[ki] = temp;
 	
-	Afficher_Vecteur(pop, un_probleme);
-	Afficher_Vecteur(pop2, un_probleme);
+	//Afficher_Vecteur(pop, un_probleme);
+	//Afficher_Vecteur(pop2, un_probleme);
 
 };
 
 // Fonction Recherche Locale
-T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int nbMaxIterations) {
+T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int iter_max) {
 	int i, j,
 		nc = 0,
 		nb_ops = un_probleme.n * un_probleme.m,
@@ -317,22 +316,28 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 
 	T_Solution sol2;
 	T_Population pop2;
+	Init_Pop(pop2);
+	Init_Sol(sol2);
+	Init_Sol(sol);
 
 	Initialiser_Tableau_APP(un_probleme,APP);
 
-	Evaluer(un_probleme, sol, pop , fin);
+	Evaluer(un_probleme, sol, pop, fin);
 
 	i = fin;
 	j = sol.PERE[i];
 
-	while ((j != 0) && (nc <= nbMaxIterations)) {
+	while ((j != 0) && (nc <= iter_max)) {
 		nc++;
+		/*
 		if (APP[i] == APP[j]) {
 			i = j;
 			j = sol.PERE[j];
 		}
 		else
 		{
+			Init_Pop(pop2);
+			Init_Sol(sol2);
 			sol2 = sol;
 			pop2 = pop;
 			Swap_Arc_Disjonctif(un_probleme, i, j, pop, pop2);
@@ -340,7 +345,6 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 			if (pop2.cout < pop.cout) {
 				sol = sol2;
 				pop = pop2;
-
 				fin = fin2;
 				i = j;
 				j = sol.PERE[i];
@@ -353,14 +357,15 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 			}
 		}
 	}
-		return pop2;
-		/*
+		return pop;
+		*/
 		if (APP[i] != APP[j]) {
 
 			sol2 = sol;
 			pop2 = pop;
 			Swap_Arc_Disjonctif(un_probleme, i, j, pop, pop2);
 			Evaluer(un_probleme, sol2, pop2, fin);
+			// std::cout << pop2.cout << std::endl;
 
 			if (pop2.cout < pop.cout) {
 				sol = sol2;
@@ -370,9 +375,12 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 			}
 			else
 			{
+				sol2 = sol;
+				pop2 = pop;
 				i = j;
 				j = sol.PERE[j];
 			}
+
 		}
 		else
 		{
@@ -380,12 +388,13 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 			j = sol.PERE[j];
 		}
 	}
-	return pop2;
-	*/
+
+	return pop;
+	
 }
 
 // Fonction Tester Double
-bool TesterDouble(T_Population *tab_pop, T_Population &pop)
+bool TesterDouble(T_Population tab_pop[], T_Population &pop)
 {
 	int i = 0, j = 0;
 	bool egal = true;
@@ -416,28 +425,35 @@ void Init_Pop(T_Population &pop) {
 	}	
 }
 
-void Init_Tab_Pop(T_Population *tab_pop) {
+void Init_Tab_Pop(T_Population tab_pop[]) {
 	for (int i = 0; i < card_pop; i++)
 	{
 		Init_Pop(tab_pop[i]);
 	}
 }
 
+void Init_Sol(T_Solution &sol){
+	for (int i = 0; i <= ntotal; i++) {
+		sol.ES[i] = 0;
+		sol.PERE[i] = 0;
+	}
+}
+
 // Generer Population & Ajouter dans Population
-void Generer_Population(T_Population tab_pop[card_pop], T_Probleme &un_probleme)
+void Generer_Population(T_Population tab_pop[], T_Probleme &un_probleme, int hachSigne[], int iter_max)
 {
-	int	compteur = 0, comptPop = 0, fin=0, nbiter = 0, hachSigne[K] = { 0 }, n_hach;
+	int	compteur = 0, comptPop = 0, fin=0, nbiter = 0, n_hach;
 	
 	T_Solution sol1;
 	T_Population pop1;
 
 	Init_Pop(pop1);
 
-	while (comptPop < card_pop && nbiter < iter_max)
+	while (comptPop < card_pop && nbiter < iter_pop)
 	{
 		Generer_Vecteur(pop1, un_probleme);
 		Evaluer(un_probleme, sol1, pop1, fin);
-		pop1 = Recherche_Locale(un_probleme, sol1, pop1, 200);
+		pop1 = Recherche_Locale(un_probleme, sol1, pop1, iter_max);
 
 		n_hach = Hachage(sol1, un_probleme);
 		if (hachSigne[n_hach] == 0)
@@ -449,10 +465,10 @@ void Generer_Population(T_Population tab_pop[card_pop], T_Probleme &un_probleme)
 		nbiter++;
 	}
 	Trier_Population(tab_pop);
-	std::cout << "On a tttttrie" << std::endl;
+	std::cout << "On a fini la Generer Population" << std::endl;
 }
 
-void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Population *tab_pop, T_Solution &sol1, T_Solution &sol2, T_Population &pop1, T_Population &pop2, int &nbcases) {
+void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Population tab_pop[], T_Solution &sol1, T_Solution &sol2, T_Population &pop1, T_Population &pop2, int &nbcases) {
 	
 	if (Tab_Sign[Hachage(sol2, un_probleme)] == 1)
 	{
@@ -486,7 +502,7 @@ int Hachage(T_Solution &sol, T_Probleme &un_probleme)
 }
 
 // Fonction Trier
-void Trier_Population(T_Population *tab_pop)
+void Trier_Population(T_Population tab_pop[])
 {
 	int i;
 	bool fin = 0;
@@ -511,45 +527,39 @@ void Trier_Population(T_Population *tab_pop)
 
 // Fonction Croisement
 void Croisement(T_Population &pop_fille, T_Population &pop1, T_Population &pop2, T_Probleme &un_probleme) {
-	int lim1, lim2, taille=(un_probleme.m*un_probleme.n), i, j = 0;
-	int TAB[nmax];
 
-	lim2 = (rand() % taille) + 1;
-	lim1 = rand() % lim2;
+	int lim, taille=(un_probleme.m*un_probleme.n), i, j = 0;
+	int TAB[nmax+1] = { 0 };
 
-	for (i = lim1; i <= lim2; i++)
+	lim = (rand() % taille) + 1;
+
+	for (i = 0; i <= lim; i++)
 	{
 		pop_fille.vecteur[i] = pop1.vecteur[i];
 		TAB[pop_fille.vecteur[i]]++;
 	}
 
-	for (i = 0; i < lim1; i++)
-	{
-		if (TAB[pop2.vecteur[j]] < un_probleme.m)
+	j = lim + 1;
+
+	for (i = lim + 1; i <= taille; i++) {
+		if (TAB[pop2.vecteur[i]] < un_probleme.m)
 		{
-			pop_fille.vecteur[i] = pop2.vecteur[j];
-			TAB[pop2.vecteur[j]]++;
+			pop_fille.vecteur[j] = pop2.vecteur[i];
+			TAB[pop2.vecteur[i]]++;
+			j++;
 		}
-		else
-		{
-			i--;
-		}
-		j++;
 	}
 
-	for (i = lim2 + 1; i <= taille; i++)
+	for (i = 0; i < lim; i++)
 	{
-		if (TAB[pop2.vecteur[j]] < un_probleme.m)
+		if (TAB[pop2.vecteur[i]] < un_probleme.m)
 		{
-			pop_fille.vecteur[i] = pop2.vecteur[j];
-			TAB[pop2.vecteur[j]]++;
+			pop_fille.vecteur[j] = pop2.vecteur[i];
+			TAB[pop2.vecteur[i]]++;
+			j++;
 		}
-		else
-		{
-			i--;
-		}
-		j++;
 	}
+
 };
 
 // Fonction Mutation
@@ -567,29 +577,39 @@ void Mutation(T_Probleme &un_probleme, T_Population &pop)
 }
 
 // Algorithme Memetique
-void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[card_pop]/*, TLineSeries *Series1*/)
+void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max/*, TLineSeries *Series1*/)
 {
 	int iter = 0, pop1, pop2 = 0;
 	int prod = un_probleme.n * un_probleme.m;
+	int hachSigne[K] = { 0 };
+	int fin = 0;
 
 	T_Population une_population;
 	T_Population pop_fille;
 	T_Solution sol;
 
 	Init_Pop(une_population);
-	std::cout << "On a init" << std::endl;
-	Generer_Population(tab_pop, un_probleme);
-	std::cout << "On a trie" << std::endl;
+	Generer_Population(tab_pop, un_probleme, hachSigne, iter_max);
+
 	while (iter < iter_max)
 	{
-		pop2 = (int)rand() % (card_pop - 12) + 12; //On prend une population parmi les 12 moins bons
-		pop1 = (int)rand() % 12;				   //Puis une autre parmi les 12 meilleurs
 
-		std::cout << "1" << std::endl;
+		// On prend une population parmi les meilleurs
+		pop1 = rand() % (card_pop/2);
+		// Puis parmi les pires
+		pop2 = (rand() % (card_pop / 2)) + (card_pop / 2);
+
 		Croisement(pop_fille, tab_pop[pop1], tab_pop[pop2], un_probleme);
+		// une_population = pop_fille;
+		Evaluer(un_probleme, sol, pop_fille, fin);
+		std::cout << std::endl << "Makespan Fille: " << pop_fille.cout << endl;
 		une_population = Recherche_Locale(un_probleme, sol, pop_fille, iter_max);
+		std::cout << "Makespan Fille Apres Recherche Locale: " << une_population.cout << endl;
 
-		std::cout << "2" << std::endl;
+		// if (pop_fille.cout < une_population.cout) {
+		//	une_population = pop_fille;
+		// }
+
 		if (une_population.cout < tab_pop[pop2].cout) //Si le nouveau cout est meilleur que l'ancien
 		{
 			if (TesterDouble(tab_pop, une_population))
@@ -599,15 +619,15 @@ void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[card_pop
 			}
 		}
 
-		std::cout << "3" << std::endl;
-		std::cout << tab_pop[0].cout << std::endl;
+		// std::cout << tab_pop[0].cout << std::endl;
 		iter++;
 		// Series1->AddXY(iter, pop[0].cout);
+		std::cout << iter << std::endl;
 	}
 }
 
 // Algorithme Genetique
-void Algorithme_Genetique(T_Probleme &un_probleme, T_Population *tab_pop/*, TLineSeries *Series1*/)
+void Algorithme_Genetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max/*, TLineSeries *Series1*/)
 {
 	int iter = 0, pop1, pop2 = 0;
 	int prod = un_probleme.n * un_probleme.m;
@@ -618,7 +638,7 @@ void Algorithme_Genetique(T_Probleme &un_probleme, T_Population *tab_pop/*, TLin
 	std::cout << "10" << std::endl;
 	Init_Pop(une_population);
 	std::cout << "11" << std::endl;
-	Generer_Population(tab_pop, un_probleme);
+	// Generer_Population(tab_pop, un_probleme);
 	std::cout << "122222" << std::endl;
 	Trier_Population(tab_pop);
 	std::cout << "12" << std::endl;
