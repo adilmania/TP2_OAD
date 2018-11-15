@@ -46,8 +46,22 @@ void Init_Population(T_POPULATION Tab_Pop[CARD_POP]);
 // Fonction Print Prob dans le Memo
 // Fonction Print Pop dans le Memo
 
-// EVALUER
 void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_probleme, int &Makespan, int &Pere_Makespan);
+void Generer_Bierwith(int Vecteur[TAILLE_VECT], T_PROBLEME &un_probleme);
+void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme);
+void Afficher_Vecteur(int Vecteur[TAILLE_VECT]);
+
+T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solution1, T_PROBLEME &un_probleme, int &Makespan1);
+void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], int Ind1, int Ind2, int NumJob1, int NumJob2);
+
+int Hachage(T_SOLUTION &une_solution, T_PROBLEME &un_probleme);
+
+void Trier_Population(T_POPULATION Tab_Pop[CARD_POP]);
+void Croisement(int VECTEUR_FILS[TAILLE_VECT], int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], T_PROBLEME &un_probleme);
+void Mutation(T_PROBLEME &un_probleme, int Vecteur[TAILLE_VECT]);
+int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population);
+
+void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
 
 #endif // !UNIT_JOBSHOPH
 

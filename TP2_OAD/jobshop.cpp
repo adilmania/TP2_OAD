@@ -154,6 +154,7 @@ void Init_Graphe(T_Probleme &un_probleme) {
 }
 */
 
+/*
 // Fonction permettant de génerer un vecteur de Bierwith
 
 void Generer_Vecteur(T_Population &pop, T_Probleme &un_probleme)
@@ -362,7 +363,7 @@ T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Popula
 		}
 	}
 		return pop;
-		*/
+		
 		if (APP[i] != APP[j]) {
 
 			sol2 = sol;
@@ -442,7 +443,8 @@ void Init_Sol(T_Solution &sol){
 		sol.PERE[i] = 0;
 	}
 }
-
+*/
+/*
 // Generer Population & Ajouter dans Population
 void Generer_Population(T_Population tab_pop[], T_Probleme &un_probleme, int hachSigne[], int iter_max)
 {
@@ -472,6 +474,10 @@ void Generer_Population(T_Population tab_pop[], T_Probleme &un_probleme, int hac
 	std::cout << "On a fini la Generer Population" << std::endl;
 }
 
+*/
+
+
+/*
 void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Population tab_pop[], T_Solution &sol1, T_Solution &sol2, T_Population &pop1, T_Population &pop2, int &nbcases) {
 	
 	if (Tab_Sign[Hachage(sol2, un_probleme)] == 1)
@@ -490,6 +496,7 @@ void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Populati
 		nbcases++;
 	}
 }
+*/
 
 // Fonction Hachage
 int Hachage(T_Solution &sol, T_Probleme &un_probleme)
@@ -505,6 +512,7 @@ int Hachage(T_Solution &sol, T_Probleme &un_probleme)
 	return(hach);
 }
 
+/*
 // Fonction Trier
 void Trier_Population(T_Population tab_pop[])
 {
@@ -565,7 +573,9 @@ void Croisement(T_Population &pop_fille, T_Population &pop1, T_Population &pop2,
 	}
 
 };
+*/
 
+/*
 // Fonction Mutation
 void Mutation(T_Probleme &un_probleme, T_Population &pop)
 {
@@ -579,9 +589,12 @@ void Mutation(T_Probleme &un_probleme, T_Population &pop)
 	pop.vecteur[a] = pop.vecteur[b];
 	pop.vecteur[b] = temp;
 }
+*/
 
 // Algorithme Memetique
-void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max/*, TLineSeries *Series1*/)
+
+/*
+void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max, TLineSeries *Series1)
 {
 	int iter = 0, pop1, pop2 = 0;
 	int prod = un_probleme.n * un_probleme.m;
@@ -629,9 +642,11 @@ void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[], int i
 		std::cout << iter << std::endl;
 	}
 }
+*/
 
+/*
 // Algorithme Genetique
-void Algorithme_Genetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max/*, TLineSeries *Series1*/)
+void Algorithme_Genetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max, TLineSeries *Series1)
 {
 	int iter = 0, pop1, pop2 = 0;
 	int prod = un_probleme.n * un_probleme.m;
@@ -677,4 +692,4 @@ void Algorithme_Genetique(T_Probleme &un_probleme, T_Population tab_pop[], int i
 		// Series1->AddXY(iter, pop[0].cout);
 	}
 }
-
+*/

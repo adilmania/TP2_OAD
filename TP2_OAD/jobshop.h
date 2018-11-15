@@ -41,40 +41,40 @@ typedef struct T_Solution
 // void lire_instance(std::string ad_file, T_Probleme &un_probleme); // Lire le fichier
 //void Init_Graphe(T_Probleme &un_probleme);
 
-void Generer_Vecteur(T_Population &pop, T_Probleme &un_probleme);
+//void Generer_Vecteur(T_Population &pop, T_Probleme &un_probleme);
 void Afficher_Vecteur(T_Population &pop, T_Probleme &un_probleme);
 
 // void Evaluer(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int &finCheminCritique); // On remplit ES & Pere ALGO DE BIERWITH
 
 void Initialiser_Tableau_APP(T_Probleme &un_probleme, int APP[ntotal + 1]);
-void Swap_Arc_Disjonctif(T_Probleme &un_probleme, int i, int j, T_Population &pop, T_Population &pop2);
+//void Swap_Arc_Disjonctif(T_Probleme &un_probleme, int i, int j, T_Population &pop, T_Population &pop2);
 
 //T_Population Recherche_Locale(T_Probleme &un_probleme, T_Solution &sol, T_Population &pop, int nbMaxIterations);
-T_Population Recherche_Locale(T_Probleme &Prob, T_Solution &Graph1, T_Population &Pop, int iter_max);
+//T_Population Recherche_Locale(T_Probleme &Prob, T_Solution &Graph1, T_Population &Pop, int iter_max);
 
-bool TesterDouble(T_Population tab_pop[], T_Population &pop);
+//bool TesterDouble(T_Population tab_pop[], T_Population &pop);
 
 // Fonction Initialisation Population et Tableau de Population
-void Init_Pop(T_Population &pop);
-void Init_Tab_Pop(T_Population tab_pop[]);
-void Init_Sol(T_Solution &sol);
+//void Init_Pop(T_Population &pop);
+//void Init_Tab_Pop(T_Population tab_pop[]);
+//void Init_Sol(T_Solution &sol);
 
 // Generer Population
-void Generer_Population(T_Population tab_pop[], T_Probleme &un_probleme, int hachSigne[], int iter_max);
+//void Generer_Population(T_Population tab_pop[], T_Probleme &un_probleme, int hachSigne[], int iter_max);
 
-void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Population tab_pop[], T_Solution &sol1, T_Solution &sol2, T_Population &pop1, T_Population &pop2, int &nbcases);
+//void Ajouter_dans_Population(int Tab_Sign[], T_Probleme &un_probleme, T_Population tab_pop[], T_Solution &sol1, T_Solution &sol2, T_Population &pop1, T_Population &pop2, int &nbcases);
 
 // Fonction Hachage
-int Hachage(T_Solution &sol, T_Probleme &un_probleme);
+//int Hachage(T_Solution &sol, T_Probleme &un_probleme);
 
 // Fonction Trier
-void Trier_Population(T_Population tab_pop[]);
+//void Trier_Population(T_Population tab_pop[]);
 
 // Fonction Croisement
-void Croisement(T_Population &pop_fille, T_Population &pop1, T_Population &pop2, T_Probleme &un_probleme);
+//void Croisement(T_Population &pop_fille, T_Population &pop1, T_Population &pop2, T_Probleme &un_probleme);
 
 // Fonction Mutation
-void Mutation(T_Probleme &un_probleme, T_Population &pop);
+//void Mutation(T_Probleme &un_probleme, T_Population &pop);
 
 // Algorithme Memetique
 void Algorithme_Memetique(T_Probleme &un_probleme, T_Population tab_pop[], int iter_max/*, TLineSeries *Series1*/);
