@@ -21,9 +21,6 @@ typedef struct T_PROBLEME {
 	int m;
 	int P_Time[N_MAX + 1][M_MAX + 1];
 	int Mach[N_MAX + 1][M_MAX + 1];
-	int T[N_MAX + 1][M_MAX + 1];
-	int P_INV[N_MAX + 1][M_MAX + 1];
-	int T_INV[N_MAX + 1][M_MAX + 1];
 }T_PROBLEME;
 
 typedef struct T_POPULATION {
@@ -38,7 +35,6 @@ typedef struct T_SOLUTION {
 
 void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/);
 void Init_Probleme(T_PROBLEME &un_probleme);
-void Remplir_Probleme(T_PROBLEME &un_probleme);
 // Fonction Print dans le Memo
 void Init_Solution(T_PROBLEME &un_probleme, T_SOLUTION &une_solution);
 void Init_Individu(T_POPULATION &un_individu);
@@ -62,6 +58,7 @@ void Mutation(T_PROBLEME &un_probleme, int Vecteur[TAILLE_VECT]);
 int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population);
 
 void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
+void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
 
 #endif // !UNIT_JOBSHOPH
 

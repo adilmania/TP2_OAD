@@ -1,39 +1,37 @@
 #include "stdafx.h"
 #include "Unit_JobShop.h"
 
-using namespace std;
-
 void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
-	ifstream fichier(ad_file, ios::in);  // on ouvre le fichier en lecture
+	std::ifstream fichier(ad_file, std::ios::in);  // on ouvre le fichier en lecture
 
 	if (fichier)  // si l'ouverture a réussi
 	{
 		std::string contenu;  // déclaration d'une chaîne qui contiendra la ligne lue
 		getline(fichier, contenu);  // on met dans "contenu" la ligne
 
-		stringstream ss(contenu);
+		std::stringstream ss(contenu);
 
 		ss >> un_probleme.n;
 		ss >> un_probleme.m;
 
-		std::cout << "Nombre de Pieces: " << un_probleme.n << endl;
-		std::cout << "Nombre de Machines: " << un_probleme.m << endl;
+		// std::cout << "Nombre de Pieces: " << un_probleme.n << std::endl;
+		// std::cout << "Nombre de Machines: " << un_probleme.m << std::endl;
 
-		std::cout << endl << "Affichage du fichier lu" << endl;
+		// std::cout << std::endl << "Affichage du fichier lu" << std::endl;
 
 		int c, compteur, j;
 
-		for (int i = 1; i <= un_probleme.n; i++)
+		for (int i = 0; i < un_probleme.n; i++)
 		{
 			// Lecture ligne par ligne
 			getline(fichier, contenu);
-			std::cout << contenu << endl;
+			// std::cout << contenu << std::endl;
 
 			// Lecture caractère par caractère
 			compteur = 0;
-			j = 1;
+			j = 0;
 
-			stringstream ss2(contenu);
+			std::stringstream ss2(contenu);
 
 			while (ss2 >> c)
 			{
@@ -55,7 +53,7 @@ void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
 	}
 	else  // sinon
 	{
-		cerr << "Impossible d'ouvrir le fichier !" << endl;
+		std::cerr << "Impossible d'ouvrir le fichier !" << std::endl;
 	}
 }
 
@@ -76,62 +74,6 @@ void Init_Probleme(T_PROBLEME &un_probleme) {
 	{
 		for (j = 0; j <= M_MAX; j++) {
 			un_probleme.P_Time[i][j] = 0;
-		}
-	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.P_INV[i][j] = 0;
-		}
-
-	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.T[i][j] = 0;
-		}
-	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.T_INV[i][j] = 0;
-		}
-	}
-}
-
-void Remplir_Probleme(T_PROBLEME &un_probleme) {
-
-	int i, j, compteur;
-
-	// Init T
-	compteur = 1;
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.T[i][j] = compteur;
-			compteur++;
-		}
-	}
-
-	// Init P_INV
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.P_INV[i][un_probleme.Mach[i][j]] = un_probleme.P_Time[i][j];
-		}
-	}
-
-	// Init T_INV
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.T_INV[i][un_probleme.Mach[i][j]] = un_probleme.T[i][j];
 		}
 	}
 
@@ -169,6 +111,116 @@ void Init_Population(T_POPULATION Tab_Pop[CARD_POP]) {
 
 void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_probleme, int &Makespan, int &Pere_Makespan) {
 
+		int i, j, k, prec, date, mach, compteur, cour, pos, finCheminCritique;
+		int prod = un_probleme.n * un_probleme.m;
+		int NP[N_MAX] = { 0 };
+		int m[M_MAX] = { 0 };
+		int T[N_MAX][M_MAX] = { 0 };
+		int P_inv[N_MAX][M_MAX] = { 0 };
+		int T_inv[N_MAX][M_MAX] = { 0 };
+
+		Init_Solution(un_probleme, une_solution);
+
+		// Init T
+		compteur = 0;
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				T[i][j] = compteur;
+				compteur++;
+			}
+		}
+
+		std::cout << "Affichage T" << std::endl;
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				std::cout << T[i][j] << " ";
+			}
+			std::cout <<std::endl;
+		}
+
+		// Init P_INV
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				P_inv[i][un_probleme.Mach[i][j]-1] = un_probleme.P_Time[i][j];
+			}
+		}
+
+		std::cout << "Affichage P_INV" << std::endl;
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				std::cout << P_inv[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+
+		// Init T_INV
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				T_inv[i][un_probleme.Mach[i][j]-1] = T[i][j];
+				// std::cout << "i= " << i << " j= " << j << " " << " Mach[i][j]= " << un_probleme.Mach[i][j] << " T[i][j]= " << T[i][j] << " T_INV[i][Mach[i][j]]= " << T_inv[i][un_probleme.Mach[i][j]] << " " << std::endl;
+			}
+		}
+
+		std::cout << "Affichage T_INV" << std::endl;
+		for (i = 0; i < un_probleme.n; i++)
+		{
+			for (j = 0; j < un_probleme.m; j++)
+			{
+				std::cout << T_inv[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+
+		i = 0;
+		// ALGO
+		for (i = 0; i < prod; i++)
+		{
+			std::cout << i << std::endl;
+			k = Vecteur[i];
+			NP[k]++;
+			if (NP[k] > 1) {
+				prec = une_solution.ES[T[k][NP[k] - 1]];
+				date = prec + un_probleme.P_Time[k][NP[k] - 1];
+				if (date > une_solution.ES[T[k][NP[k] - 1]])
+				{
+					une_solution.ES[T[k][NP[k]]] = date;
+					cour = T[k][NP[k]];
+					pos = T[k][NP[k] - 1];
+					une_solution.PERE[cour] = pos;
+				}
+			}
+			mach = un_probleme.Mach[k][NP[k]];
+			if (m[mach] > 0) {
+				prec = une_solution.ES[T_inv[m[mach]][mach]];
+				if (prec + P_inv[m[mach]][mach] > une_solution.ES[T[k][NP[k]]])
+				{
+					une_solution.ES[T[k][NP[k]]] = prec + P_inv[m[mach]][mach];
+					cour = T[k][NP[k]];
+					pos = T_inv[m[mach]][mach];
+					une_solution.PERE[cour] = pos;
+				}
+			}
+			m[mach] = k;
+		}
+		for (i = 0; i < un_probleme.n; i++) {
+			if (Makespan<une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]) {
+				Makespan = une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]; /* Calcul du Makespan */
+				Pere_Makespan = i*un_probleme.m;
+			}
+		}
+	}
+
+	/*
 	Makespan = 0;
 	int i, k, prec, date, mach, cour, pos;
 	int NbOp = un_probleme.n * un_probleme.m;
@@ -217,8 +269,7 @@ void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_
 			Pere_Makespan = i*un_probleme.m;
 		}
 	}
-
-}
+	*/
 
 void Generer_Bierwith(int Vecteur[TAILLE_VECT], T_PROBLEME &un_probleme) {
 	int i;
@@ -246,11 +297,13 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 	T_SOLUTION Sol1, Sol2;
 	int NbOp = un_probleme.n * un_probleme.m;
 	T_POPULATION Indiv1, Indiv2;
-	Init_Individu(Indiv1);
-	Init_Individu(Indiv2);
 
 	while (Cpt < CARD_POP && NbIter < ITER_POP)
 	{
+		Init_Solution(un_probleme, Sol1);
+		Init_Solution(un_probleme, Sol2);
+		Init_Individu(Indiv1);
+		Init_Individu(Indiv2);
 
 		Generer_Bierwith(Indiv1.Vecteur, un_probleme);
 		Evaluer(Indiv1.Vecteur, Sol1, un_probleme, Makespan, Pere_Makespan);
@@ -262,7 +315,7 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 
 		Indiv1.Cout = Makespan;
 
-		for (i = 0; i < NbOp; i++)
+		for (i = 0; i <= NbOp; i++)
 		{
 			Indiv2.Vecteur[i] = Indiv1.Vecteur[i];
 		}
@@ -329,6 +382,7 @@ void Afficher_Vecteur(int Vecteur[TAILLE_VECT]) {
 }
 
 T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solution1, T_PROBLEME &un_probleme, int &Makespan1) {
+
 	int NbOp, i, Ind1, Ind2, NbIter = 0, Vecteur2[TAILLE_VECT] = { 0 }, Int1, Int2;
 	T_SOLUTION une_solution2;
 	T_POPULATION une_population;
@@ -352,13 +406,7 @@ T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solutio
 		}
 		else
 		{
-			//std::cout << "Avant" << std::endl;
-			//Afficher_Vecteur(Vecteur1);
-			//Afficher_Vecteur(Vecteur2);
 			Swap_Arc_Disjonctif(un_probleme, Vecteur1, Vecteur2, Ind1, Ind2, Int1, Int2);
-			//std::cout << "Après" << std::endl;
-			//Afficher_Vecteur(Vecteur1);
-			//Afficher_Vecteur(Vecteur2);
 			Evaluer(Vecteur2, une_solution2, un_probleme, Makespan2, Pere_Makespan2);
 
 			if (Makespan2 < Makespan1)
@@ -371,14 +419,9 @@ T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solutio
 				}
 				Pere_Makespan1 = Pere_Makespan2;
 				Makespan1 = Makespan2;
+			}
 				Ind1 = Ind2;
 				Ind2 = une_solution1.PERE[Ind1];
-			}
-			else
-			{
-				Ind1 = Ind2;
-				Ind2 = une_solution1.PERE[Ind2];
-			}
 		}
 		NbIter++;
 	}
@@ -406,7 +449,7 @@ void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int
 	}
 	k = 1;
 
-	while (Cpt1 != Ind1P)
+	while (Cpt1 != Ind1P && k<=NbOp)
 	{
 		if (Vecteur2[k] == NumJob1)
 		{
@@ -418,7 +461,7 @@ void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int
 	Pos1 = k - 1;
 	k = 1;
 
-	while (Cpt2 != Ind2P)
+	while (Cpt2 != Ind2P && k <= NbOp)
 	{
 		if (Vecteur2[k] == NumJob2)
 		{
@@ -508,7 +551,7 @@ void Mutation(T_PROBLEME &un_probleme, int Vecteur[TAILLE_VECT]) {
 	int temp;
 
 	a = (rand() % (un_probleme.m * un_probleme.n - 1)) + 1;
-	b = rand() % a;
+	b = rand() % a + 1;
 
 	temp = Vecteur[a];
 	Vecteur[a] = Vecteur[b];
@@ -541,7 +584,54 @@ int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population) {
 
 }
 
-void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/) {
+void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max /*Unit_Form Unit_Form1, TLineSeries *Series1*/) {
+	int NbIter = 0, Indiv1, Indiv2 = 0, Vecteur[TAILLE_VECT];
+	int Makespan = 0, Pere_Makespan = 0;
+
+	T_POPULATION une_population;
+	T_SOLUTION une_solution;
+	Init_Individu(une_population);
+
+	Generer_Population(Tab_Pop, un_probleme);
+	Trier_Population(Tab_Pop);
+
+	while (NbIter < iter_max)
+	{
+		// On prend une population parmi les meilleurs
+		Indiv1 = rand() % (CARD_POP / 2);
+		// Puis parmi les pires
+		Indiv2 = (rand() % (CARD_POP / 2)) + (CARD_POP / 2);
+
+		//std::cout << std::endl;
+		Croisement(Vecteur, Tab_Pop[Indiv1].Vecteur, Tab_Pop[Indiv2].Vecteur, un_probleme);
+		//std::cout << "Apres Croisement: " << std::endl;
+	//	Afficher_Vecteur(Vecteur);
+
+		Evaluer(Vecteur, une_solution, un_probleme, Makespan, Pere_Makespan);
+	//	std::cout << Makespan << std::endl;
+
+		une_population = Recherche_Locale(Vecteur, une_solution, un_probleme, Makespan);
+		//std::cout << "Apres R.LOC: " << std::endl;
+	//	Afficher_Vecteur(une_population.Vecteur);
+	//	std::cout << une_population.Cout << std::endl;
+	//	std::cout << std::endl;
+
+		if (une_population.Cout < Tab_Pop[Indiv2].Cout)
+		{
+			if (TesterDouble(Tab_Pop, une_population))
+			{
+				Tab_Pop[Indiv2] = une_population;
+				Trier_Population(Tab_Pop);
+			}
+		}
+
+		//Series1->AddXY(NbIter, Tab_Pop[0].Cout);
+		NbIter++;
+	}
+
+}
+
+void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*TLineSeries *Series2*/) {
 	int NbIter = 0, Indiv1, Indiv2 = 0, Vecteur[TAILLE_VECT];
 	int Makespan = 0, Pere_Makespan = 0;
 
@@ -560,10 +650,13 @@ void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP
 		Indiv2 = (rand() % (CARD_POP / 2)) + (CARD_POP / 2);
 
 		Croisement(Vecteur, Tab_Pop[Indiv1].Vecteur, Tab_Pop[Indiv2].Vecteur, un_probleme);
+
+		if (NbIter % 10 == 0){
+			Mutation(un_probleme, Vecteur);
+		}
+			
 		Evaluer(Vecteur, une_solution, un_probleme, Makespan, Pere_Makespan);
-		std::cout << "Avant: " << Makespan << std::endl;
 		une_population = Recherche_Locale(Vecteur, une_solution, un_probleme, Makespan);
-		std::cout << "Après: " << une_population.Cout << std::endl;
 
 		if (une_population.Cout < Tab_Pop[Indiv2].Cout)
 		{
@@ -573,7 +666,7 @@ void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP
 				Trier_Population(Tab_Pop);
 			}
 		}
-
+		//Series2->AddXY(NbIter, Tab_Pop[0].Cout);
 		NbIter++;
 	}
 

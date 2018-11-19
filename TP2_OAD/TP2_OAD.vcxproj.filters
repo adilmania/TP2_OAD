@@ -25,6 +25,63 @@
     <Text Include="LA01.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="LA02.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA03.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA04.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA05.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA06.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA07.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA08.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA09.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA10.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA11.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA12.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA13.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA14.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA15.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA16.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA17.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA18.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA19.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="LA20.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -33,10 +90,10 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jobshop.h">
+    <ClInclude Include="Unit_JobShop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Unit_JobShop.h">
+    <ClInclude Include="Unit_Form1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,19 +103,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TP2_OAD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jobshop.cpp">
+    <ClCompile Include="Unit_JobShop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Unit_JobShop.cpp">
+    <ClCompile Include="Unit_Form1.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,5 +123,10 @@
     <Image Include="app.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Unit_Form1.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
