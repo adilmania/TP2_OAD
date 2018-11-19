@@ -21,7 +21,7 @@ void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
 
 		int c, compteur, j;
 
-		for (int i = 0; i < un_probleme.n; i++)
+		for (int i = 1; i <= un_probleme.n; i++)
 		{
 			// Lecture ligne par ligne
 			getline(fichier, contenu);
@@ -29,7 +29,7 @@ void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
 
 			// Lecture caractère par caractère
 			compteur = 0;
-			j = 0;
+			j = 1;
 
 			std::stringstream ss2(contenu);
 
@@ -77,6 +77,62 @@ void Init_Probleme(T_PROBLEME &un_probleme) {
 		}
 	}
 
+	for (i = 0; i <= N_MAX; i++)
+	{
+		for (j = 0; j <= M_MAX; j++) {
+			un_probleme.P_INV[i][j] = 0;
+		}
+
+	}
+
+	for (i = 0; i <= N_MAX; i++)
+	{
+		for (j = 0; j <= M_MAX; j++) {
+			un_probleme.T[i][j] = 0;
+		}
+	}
+
+	for (i = 0; i <= N_MAX; i++)
+	{
+		for (j = 0; j <= M_MAX; j++) {
+			un_probleme.T_INV[i][j] = 0;
+		}
+	}
+}
+
+void Remplir_Probleme(T_PROBLEME &un_probleme) {
+
+	int i, j, compteur;
+
+	// Init T
+	compteur = 1;
+	for (i = 1; i <= un_probleme.n; i++)
+	{
+		for (j = 1; j <= un_probleme.m; j++)
+		{
+			un_probleme.T[i][j] = compteur;
+			compteur++;
+		}
+	}
+
+	// Init P_INV
+	for (i = 1; i <= un_probleme.n; i++)
+	{
+		for (j = 1; j <= un_probleme.m; j++)
+		{
+			un_probleme.P_INV[i][un_probleme.Mach[i][j]] = un_probleme.P_Time[i][j];
+		}
+	}
+
+	// Init T_INV
+	for (i = 1; i <= un_probleme.n; i++)
+	{
+		for (j = 1; j <= un_probleme.m; j++)
+		{
+			un_probleme.T_INV[i][un_probleme.Mach[i][j]] = un_probleme.T[i][j];
+		}
+	}
+
 }
 
 void Init_Solution(T_PROBLEME &un_probleme, T_SOLUTION &une_solution) {
@@ -110,82 +166,50 @@ void Init_Population(T_POPULATION Tab_Pop[CARD_POP]) {
 }
 
 void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_probleme, int &Makespan, int &Pere_Makespan) {
-
+		une_solution.ES[0] = 0;
 		int i, j, k, prec, date, mach, compteur, cour, pos, finCheminCritique;
 		int prod = un_probleme.n * un_probleme.m;
 		int NP[N_MAX] = { 0 };
 		int m[M_MAX] = { 0 };
-		int T[N_MAX][M_MAX] = { 0 };
-		int P_inv[N_MAX][M_MAX] = { 0 };
-		int T_inv[N_MAX][M_MAX] = { 0 };
+		int T[N_MAX][M_MAX];
+		int P_inv[N_MAX][M_MAX];
+		int T_inv[N_MAX][M_MAX];
 
 		Init_Solution(un_probleme, une_solution);
 
 		// Init T
-		compteur = 0;
-		for (i = 0; i < un_probleme.n; i++)
+		compteur = 1;
+		for (i = 1; i <= un_probleme.n; i++)
 		{
-			for (j = 0; j < un_probleme.m; j++)
+			for (j = 1; j <= un_probleme.m; j++)
 			{
 				T[i][j] = compteur;
 				compteur++;
 			}
 		}
 
-		std::cout << "Affichage T" << std::endl;
-		for (i = 0; i < un_probleme.n; i++)
-		{
-			for (j = 0; j < un_probleme.m; j++)
-			{
-				std::cout << T[i][j] << " ";
-			}
-			std::cout <<std::endl;
-		}
-
 		// Init P_INV
-		for (i = 0; i < un_probleme.n; i++)
+		for (i = 1; i <= un_probleme.n; i++)
 		{
-			for (j = 0; j < un_probleme.m; j++)
+			for (j = 1; j <= un_probleme.m; j++)
 			{
-				P_inv[i][un_probleme.Mach[i][j]-1] = un_probleme.P_Time[i][j];
+				P_inv[i][un_probleme.Mach[i][j]] = un_probleme.P_Time[i][j];
 			}
-		}
-
-		std::cout << "Affichage P_INV" << std::endl;
-		for (i = 0; i < un_probleme.n; i++)
-		{
-			for (j = 0; j < un_probleme.m; j++)
-			{
-				std::cout << P_inv[i][j] << " ";
-			}
-			std::cout << std::endl;
 		}
 
 		// Init T_INV
-		for (i = 0; i < un_probleme.n; i++)
+		for (i = 1; i <= un_probleme.n; i++)
 		{
-			for (j = 0; j < un_probleme.m; j++)
+			for (j = 1; j <= un_probleme.m; j++)
 			{
-				T_inv[i][un_probleme.Mach[i][j]-1] = T[i][j];
+				T_inv[i][un_probleme.Mach[i][j]] = T[i][j];
 				// std::cout << "i= " << i << " j= " << j << " " << " Mach[i][j]= " << un_probleme.Mach[i][j] << " T[i][j]= " << T[i][j] << " T_INV[i][Mach[i][j]]= " << T_inv[i][un_probleme.Mach[i][j]] << " " << std::endl;
 			}
 		}
 
-		std::cout << "Affichage T_INV" << std::endl;
-		for (i = 0; i < un_probleme.n; i++)
-		{
-			for (j = 0; j < un_probleme.m; j++)
-			{
-				std::cout << T_inv[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
-
-		i = 0;
 		// ALGO
-		for (i = 0; i < prod; i++)
+		for (i = 1; i <= prod; i++)
 		{
-			std::cout << i << std::endl;
 			k = Vecteur[i];
 			NP[k]++;
 			if (NP[k] > 1) {
@@ -212,12 +236,14 @@ void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_
 			}
 			m[mach] = k;
 		}
-		for (i = 0; i < un_probleme.n; i++) {
-			if (Makespan<une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]) {
-				Makespan = une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]; /* Calcul du Makespan */
-				Pere_Makespan = i*un_probleme.m;
+		for (i = 1; i <= un_probleme.n; i++) {
+			if (une_solution.ES[0]<une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]) {
+				une_solution.ES[0] = une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]; /* Calcul du Makespan */
+				finCheminCritique = i*un_probleme.m;
 			}
 		}
+		Makespan = une_solution.ES[0];
+		Pere_Makespan = finCheminCritique;
 	}
 
 	/*
@@ -373,7 +399,7 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 
 void Afficher_Vecteur(int Vecteur[TAILLE_VECT]) {
 	int i;
-	int nb_operations = 10;
+	int nb_operations = 55;
 	printf("Vecteur de Bierwith : ");
 	for (i = 0; i < nb_operations + 1; i++) {
 		printf("%d ", Vecteur[i]);
