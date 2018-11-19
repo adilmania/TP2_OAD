@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Unit_JobShop.h"
 
-void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
+void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme) {
 	std::ifstream fichier(ad_file, std::ios::in);  // on ouvre le fichier en lecture
 
 	if (fichier)  // si l'ouverture a réussi
@@ -14,18 +14,12 @@ void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
 		ss >> un_probleme.n;
 		ss >> un_probleme.m;
 
-		// std::cout << "Nombre de Pieces: " << un_probleme.n << std::endl;
-		// std::cout << "Nombre de Machines: " << un_probleme.m << std::endl;
-
-		// std::cout << std::endl << "Affichage du fichier lu" << std::endl;
-
 		int c, compteur, j;
 
 		for (int i = 1; i <= un_probleme.n; i++)
 		{
 			// Lecture ligne par ligne
 			getline(fichier, contenu);
-			// std::cout << contenu << std::endl;
 
 			// Lecture caractère par caractère
 			compteur = 0;
@@ -35,7 +29,7 @@ void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/) {
 
 			while (ss2 >> c)
 			{
-				// cout << c << endl;
+
 				if (compteur % 2 == 0)
 				{
 					un_probleme.Mach[i][j] = c + 1; /* c+1 avant */
@@ -76,63 +70,6 @@ void Init_Probleme(T_PROBLEME &un_probleme) {
 			un_probleme.P_Time[i][j] = 0;
 		}
 	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.P_INV[i][j] = 0;
-		}
-
-	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.T[i][j] = 0;
-		}
-	}
-
-	for (i = 0; i <= N_MAX; i++)
-	{
-		for (j = 0; j <= M_MAX; j++) {
-			un_probleme.T_INV[i][j] = 0;
-		}
-	}
-}
-
-void Remplir_Probleme(T_PROBLEME &un_probleme) {
-
-	int i, j, compteur;
-
-	// Init T
-	compteur = 1;
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.T[i][j] = compteur;
-			compteur++;
-		}
-	}
-
-	// Init P_INV
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.P_INV[i][un_probleme.Mach[i][j]] = un_probleme.P_Time[i][j];
-		}
-	}
-
-	// Init T_INV
-	for (i = 1; i <= un_probleme.n; i++)
-	{
-		for (j = 1; j <= un_probleme.m; j++)
-		{
-			un_probleme.T_INV[i][un_probleme.Mach[i][j]] = un_probleme.T[i][j];
-		}
-	}
-
 }
 
 void Init_Solution(T_PROBLEME &un_probleme, T_SOLUTION &une_solution) {
@@ -203,13 +140,13 @@ void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_
 			for (j = 1; j <= un_probleme.m; j++)
 			{
 				T_inv[i][un_probleme.Mach[i][j]] = T[i][j];
-				// std::cout << "i= " << i << " j= " << j << " " << " Mach[i][j]= " << un_probleme.Mach[i][j] << " T[i][j]= " << T[i][j] << " T_INV[i][Mach[i][j]]= " << T_inv[i][un_probleme.Mach[i][j]] << " " << std::endl;
 			}
 		}
-
+		
 		// ALGO
 		for (i = 1; i <= prod; i++)
 		{
+
 			k = Vecteur[i];
 			NP[k]++;
 			if (NP[k] > 1) {
@@ -245,57 +182,6 @@ void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_
 		Makespan = une_solution.ES[0];
 		Pere_Makespan = finCheminCritique;
 	}
-
-	/*
-	Makespan = 0;
-	int i, k, prec, date, mach, cour, pos;
-	int NbOp = un_probleme.n * un_probleme.m;
-	int NP[N_MAX] = { 0 };
-	int m[M_MAX] = { 0 };
-
-	Init_Solution(un_probleme, une_solution);
-
-	// ALGO
-	for (i = 1; i < NbOp; i++)
-	{
-		k = Vecteur[i];
-		NP[k]++;
-
-		if (NP[k] > 1) {
-			prec = une_solution.ES[un_probleme.T[k][NP[k] - 1]];
-			date = prec + un_probleme.P_Time[k][NP[k] - 1];
-			if (date > une_solution.ES[un_probleme.T[k][NP[k] - 1]])
-			{
-				une_solution.ES[un_probleme.T[k][NP[k]]] = date;
-				cour = un_probleme.T[k][NP[k]];
-				pos = un_probleme.T[k][NP[k] - 1];
-				une_solution.PERE[cour] = pos;
-			}
-		}
-
-		mach = un_probleme.Mach[k][NP[k]];
-
-		if (m[mach] > 0) {
-			prec = une_solution.ES[un_probleme.T_INV[m[mach]][mach]];
-			if (prec + un_probleme.P_INV[m[mach]][mach] > une_solution.ES[un_probleme.T[k][NP[k]]])
-			{
-				une_solution.ES[un_probleme.T[k][NP[k]]] = prec + un_probleme.P_INV[m[mach]][mach];
-				cour = un_probleme.T[k][NP[k]];
-				pos = un_probleme.T_INV[m[mach]][mach];
-				une_solution.PERE[cour] = pos;
-			}
-		}
-		m[mach] = k;
-	}
-
-	// Calcul du cout (makespan)
-	for (i = 1; i <= un_probleme.n; i++) {
-		if (Makespan<une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m]) {
-			Makespan = une_solution.ES[i*un_probleme.m] + un_probleme.P_Time[i][un_probleme.m];
-			Pere_Makespan = i*un_probleme.m;
-		}
-	}
-	*/
 
 void Generer_Bierwith(int Vecteur[TAILLE_VECT], T_PROBLEME &un_probleme) {
 	int i;
@@ -334,11 +220,6 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 		Generer_Bierwith(Indiv1.Vecteur, un_probleme);
 		Evaluer(Indiv1.Vecteur, Sol1, un_probleme, Makespan, Pere_Makespan);
 
-		// Pop1 = Recherche_Locale(Pop1.Vecteur, une_solution, un_probleme, Makespan);
-
-		//GenererSeq(Indiv1.Vect, Prob);
-		//Evaluer(Indiv1.Vect, &Graph1, Prob, Makespan, PereMake);
-
 		Indiv1.Cout = Makespan;
 
 		for (i = 0; i <= NbOp; i++)
@@ -347,7 +228,7 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 		}
 
 		Indiv1 = Recherche_Locale(Indiv2.Vecteur, Sol2, un_probleme, Makespan);
-		//RechercheLocale(Indiv2.Vect, &Graph2, Prob, Makespan);
+
 		Indiv2.Cout = Makespan;
 
 		if (Tab[Hachage(Sol2, un_probleme)] == 1)
@@ -367,33 +248,6 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 		}
 		NbIter++;
 	}
-	/*
-	int	compteur = 0, comptPop = 0, fin = 0, nbiter = 0, n_hach = 0;
-	int Makespan = 0, Pere_Makespan = 0;
-
-	T_SOLUTION une_solution;
-	T_POPULATION Pop1;
-	Init_Individu(Pop1);
-
-	while (comptPop < CARD_POP && nbiter < ITER_POP)
-	{
-		Generer_Bierwith(Pop1.Vecteur, un_probleme);
-		Evaluer(Pop1.Vecteur, une_solution, un_probleme, Makespan, Pere_Makespan);
-		Pop1.Cout = Makespan;
-
-		Pop1 = Recherche_Locale(Pop1.Vecteur, une_solution, un_probleme, Makespan);
-
-		n_hach = Hachage(une_solution, un_probleme);
-
-		if (hachSigne[n_hach] == 0)
-		{
-			Tab_Pop[comptPop] = Pop1;
-			hachSigne[n_hach] = 1;
-			comptPop++;
-		}
-		nbiter++;
-	}
-	*/
 	Trier_Population(Tab_Pop);
 }
 
@@ -412,6 +266,8 @@ T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solutio
 	int NbOp, i, Ind1, Ind2, NbIter = 0, Vecteur2[TAILLE_VECT] = { 0 }, Int1, Int2;
 	T_SOLUTION une_solution2;
 	T_POPULATION une_population;
+	Init_Individu(une_population);
+
 	int Makespan2 = 0, Pere_Makespan1 = 0, Pere_Makespan2 = 0;
 
 	NbOp = un_probleme.n * un_probleme.m;
@@ -446,8 +302,8 @@ T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solutio
 				Pere_Makespan1 = Pere_Makespan2;
 				Makespan1 = Makespan2;
 			}
-				Ind1 = Ind2;
-				Ind2 = une_solution1.PERE[Ind1];
+			Ind1 = Ind2;
+			Ind2 = une_solution1.PERE[Ind1];
 		}
 		NbIter++;
 	}
@@ -461,7 +317,7 @@ T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solutio
 	return une_population;
 }
 
-void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], int Ind1, int Ind2, int NumJob1, int NumJob2) {
+void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], int Ind1, int Ind2, int NumP1, int NumP2) {
 	int NbOp, Tmp, k = 1, Ind1P, Ind2P, Pos1, Pos2, Cpt1 = 0, Cpt2 = 0;
 
 	Ind1P = ((Ind1 - 1) % un_probleme.m) + 1;
@@ -473,33 +329,36 @@ void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int
 	{
 		Vecteur2[k] = Vecteur1[k]; 
 	}
-	k = 1;
 
-	while (Cpt1 != Ind1P && k<=NbOp)
-	{
-		if (Vecteur2[k] == NumJob1)
+	if (Ind1P != 0 && Ind2P != 0) {
+		k = 1;
+		while (Cpt1 != Ind1P && k <= NbOp)
 		{
-			Cpt1++;
+			if (Vecteur2[k] == NumP1)
+			{
+				Cpt1++;
+			}
+			k++;
 		}
-		k++;
+
+		Pos1 = k - 1;
+		k = 1;
+
+		while (Cpt2 != Ind2P && k <= NbOp)
+		{
+			if (Vecteur2[k] == NumP2)
+			{
+				Cpt2++;
+			}
+			k++;
+		}
+		Pos2 = k - 1;
+
+		Tmp = Vecteur2[Pos1];
+		Vecteur2[Pos1] = Vecteur2[Pos2];
+		Vecteur2[Pos2] = Tmp;
 	}
 
-	Pos1 = k - 1;
-	k = 1;
-
-	while (Cpt2 != Ind2P && k <= NbOp)
-	{
-		if (Vecteur2[k] == NumJob2)
-		{
-			Cpt2++;
-		}
-		k++;
-	}
-	Pos2 = k - 1;
-
-	Tmp = Vecteur2[Pos1];
-	Vecteur2[Pos1] = Vecteur2[Pos2];
-	Vecteur2[Pos2] = Tmp;
 }
 
 int Hachage(T_SOLUTION &une_solution, T_PROBLEME &un_probleme) {
@@ -560,7 +419,7 @@ void Croisement(int VECTEUR_FILS[TAILLE_VECT], int Vecteur1[TAILLE_VECT], int Ve
 		}
 	}
 
-	for (i = 1; i < lim; i++)
+	for (i = 1; i <= lim; i++)
 	{
 		if (TAB[Vecteur2[i]] < un_probleme.m && j <= NbOp)
 		{
@@ -610,7 +469,7 @@ int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population) {
 
 }
 
-void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max /*Unit_Form Unit_Form1, TLineSeries *Series1*/) {
+void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max, System::Windows::Forms::DataVisualization::Charting::Chart^  chart1) {
 	int NbIter = 0, Indiv1, Indiv2 = 0, Vecteur[TAILLE_VECT];
 	int Makespan = 0, Pere_Makespan = 0;
 
@@ -628,19 +487,11 @@ void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP
 		// Puis parmi les pires
 		Indiv2 = (rand() % (CARD_POP / 2)) + (CARD_POP / 2);
 
-		//std::cout << std::endl;
 		Croisement(Vecteur, Tab_Pop[Indiv1].Vecteur, Tab_Pop[Indiv2].Vecteur, un_probleme);
-		//std::cout << "Apres Croisement: " << std::endl;
-	//	Afficher_Vecteur(Vecteur);
 
 		Evaluer(Vecteur, une_solution, un_probleme, Makespan, Pere_Makespan);
-	//	std::cout << Makespan << std::endl;
 
 		une_population = Recherche_Locale(Vecteur, une_solution, un_probleme, Makespan);
-		//std::cout << "Apres R.LOC: " << std::endl;
-	//	Afficher_Vecteur(une_population.Vecteur);
-	//	std::cout << une_population.Cout << std::endl;
-	//	std::cout << std::endl;
 
 		if (une_population.Cout < Tab_Pop[Indiv2].Cout)
 		{
@@ -651,13 +502,14 @@ void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP
 			}
 		}
 
+		chart1->Series["Algo Memetique"]->Points->AddXY(NbIter, Tab_Pop[0].Cout);
 		//Series1->AddXY(NbIter, Tab_Pop[0].Cout);
 		NbIter++;
 	}
 
 }
 
-void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*TLineSeries *Series2*/) {
+void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max, System::Windows::Forms::DataVisualization::Charting::Chart^  chart1) {
 	int NbIter = 0, Indiv1, Indiv2 = 0, Vecteur[TAILLE_VECT];
 	int Makespan = 0, Pere_Makespan = 0;
 
@@ -692,7 +544,8 @@ void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP
 				Trier_Population(Tab_Pop);
 			}
 		}
-		//Series2->AddXY(NbIter, Tab_Pop[0].Cout);
+
+		chart1->Series["Algo Genetique"]->Points->AddXY(NbIter, Tab_Pop[0].Cout);
 		NbIter++;
 	}
 

@@ -33,14 +33,12 @@ typedef struct T_SOLUTION {
 	int PERE[TAILLE_VECT + 1];
 }T_SOLUTION;
 
-void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme /*MEMO*/);
+void Lecture_Fichier(std::string ad_file, T_PROBLEME &un_probleme);
 void Init_Probleme(T_PROBLEME &un_probleme);
-// Fonction Print dans le Memo
+
 void Init_Solution(T_PROBLEME &un_probleme, T_SOLUTION &une_solution);
 void Init_Individu(T_POPULATION &un_individu);
 void Init_Population(T_POPULATION Tab_Pop[CARD_POP]);
-// Fonction Print Prob dans le Memo
-// Fonction Print Pop dans le Memo
 
 void Evaluer(int Vecteur[TAILLE_VECT], T_SOLUTION &une_solution, T_PROBLEME &un_probleme, int &Makespan, int &Pere_Makespan);
 void Generer_Bierwith(int Vecteur[TAILLE_VECT], T_PROBLEME &un_probleme);
@@ -48,7 +46,7 @@ void Generer_Population(T_POPULATION Tab_Pop[CARD_POP], T_PROBLEME &un_probleme)
 void Afficher_Vecteur(int Vecteur[TAILLE_VECT]);
 
 T_POPULATION Recherche_Locale(int Vecteur1[TAILLE_VECT], T_SOLUTION &une_solution1, T_PROBLEME &un_probleme, int &Makespan1);
-void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], int Ind1, int Ind2, int NumJob1, int NumJob2);
+void Swap_Arc_Disjonctif(T_PROBLEME &un_probleme, int Vecteur1[TAILLE_VECT], int Vecteur2[TAILLE_VECT], int Ind1, int Ind2, int NumP1, int NumP2);
 
 int Hachage(T_SOLUTION &une_solution, T_PROBLEME &un_probleme);
 
@@ -57,8 +55,8 @@ void Croisement(int VECTEUR_FILS[TAILLE_VECT], int Vecteur1[TAILLE_VECT], int Ve
 void Mutation(T_PROBLEME &un_probleme, int Vecteur[TAILLE_VECT]);
 int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population);
 
-void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
-void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
+void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max, System::Windows::Forms::DataVisualization::Charting::Chart^  chart1);
+void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max, System::Windows::Forms::DataVisualization::Charting::Chart^  chart1);
 
 #endif // !UNIT_JOBSHOPH
 
