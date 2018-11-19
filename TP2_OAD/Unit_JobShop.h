@@ -62,6 +62,7 @@ void Mutation(T_PROBLEME &un_probleme, int Vecteur[TAILLE_VECT]);
 int TesterDouble(T_POPULATION Tab_Pop[CARD_POP], T_POPULATION &une_population);
 
 void Algorithme_Memetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
+void Algorithme_Genetique(T_PROBLEME &un_probleme, T_POPULATION Tab_Pop[CARD_POP], int iter_max/*, TLineSeries *Series1*/);
 
 #endif // !UNIT_JOBSHOPH
 

@@ -98,6 +98,7 @@
       <AdditionalDependencies />
       <SubSystem>Console</SubSystem>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,18 +136,42 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="AD01.txt" />
     <Text Include="FT06.txt" />
     <Text Include="LA01.txt" />
+    <Text Include="LA02.txt" />
+    <Text Include="LA03.txt" />
+    <Text Include="LA04.txt" />
+    <Text Include="LA05.txt" />
+    <Text Include="LA06.txt" />
+    <Text Include="LA07.txt" />
+    <Text Include="LA08.txt" />
+    <Text Include="LA09.txt" />
+    <Text Include="LA10.txt" />
+    <Text Include="LA11.txt" />
+    <Text Include="LA12.txt" />
+    <Text Include="LA13.txt" />
+    <Text Include="LA14.txt" />
+    <Text Include="LA15.txt" />
+    <Text Include="LA16.txt" />
+    <Text Include="LA17.txt" />
+    <Text Include="LA18.txt" />
+    <Text Include="LA19.txt" />
+    <Text Include="LA20.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="jobshop.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Unit_Form1.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Unit_JobShop.h" />
   </ItemGroup>
   <ItemGroup>
@@ -154,18 +179,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="jobshop.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TP2_OAD.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Unit_Form1.cpp" />
     <ClCompile Include="Unit_JobShop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Unit_Form1.resx">
+      <DependentUpon>Unit_Form1.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
